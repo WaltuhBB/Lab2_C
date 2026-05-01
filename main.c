@@ -67,6 +67,36 @@ bool clearMemory(int** ptrM, size_t row)
     return res;
 }
 
+//Вывод матрицы в консоль
+bool printMatrix(int** ptrM, size_t row, size_t col)
+{
+    bool res = false;
+
+    if (ptrM != NULL)
+    {
+        for (size_t i = 0; i < row; i++)
+        {
+            if (ptrM[i] != NULL)
+            {
+                for (size_t j = 0; j < col; j++)
+                {
+                    printf("%d ", ptrM[i][j]);
+                }
+                printf("\n");
+            }
+            else
+            {
+                printf("NULL ");
+                printf("\n");
+            }
+        }
+
+        res = true;
+    }
+
+    return res;
+}
+
 int main()
 {
     
@@ -75,18 +105,8 @@ int main()
 
     int **d_Mat = createMatrix_r(row, col, 0, 3);
 
-    if (d_Mat != NULL)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                printf("%d ", d_Mat[i][j]);
-            }
-            printf("\n");
-        }
-    }
-    else
+    bool checkN = printMatrix(d_Mat, row, col);
+    if (!checkN)
     {
         printf("Memory was never allocated ");
     }
