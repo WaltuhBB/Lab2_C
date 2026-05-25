@@ -1,48 +1,54 @@
 #include <stdio.h>
 #include <stdbool.h>
+
 #include <stdlib.h>
 #include <malloc.h>
 
 //Создание матрицы и заполнение значениями из диапазона
 int** createMatrix_r(size_t row, size_t col, int down, int up)
 {
-    int **ptrM = (int**)calloc(row, sizeof(int*));
-
-    if (ptrM != NULL)
+    int **ptrM = NULL;
+    
+    if (row && col)
     {
-        int val = down;
-        bool flagN = false;
-        
-        for (size_t i = 0; i < row && !flagN; i++)
+        ptrM = (int**)calloc(row, sizeof(int*));
+
+        if (ptrM)
         {
-            ptrM[i] = (int*)calloc(col, sizeof(int));
-
-            if (ptrM[i] != NULL)
+            int val = down;
+            bool flagN = false;
+            
+            for (size_t i = 0; i < row && !flagN; i++)
             {
-                for (size_t j = 0; j < col; j++)
-                {
-                    ptrM[i][j] = val;
-                    val++;
+                ptrM[i] = (int*)calloc(col, sizeof(int));
 
-                    if (val > up)
+                if (ptrM[i])
+                {
+                    for (size_t j = 0; j < col; j++)
                     {
-                        val = down;
+                        ptrM[i][j] = val;
+                        val++;
+
+                        if (val > up)
+                        {
+                            val = down;
+                        }
                     }
                 }
-            }
-            else
-            {
-                for (size_t k = 0; k < i; k++)
+                else
                 {
-                    free(ptrM[k]);
+                    for (size_t k = 0; k < i; k++)
+                    {
+                        free(ptrM[k]);
+                        ptrM[k] = NULL;
+                    }
+                    free(ptrM);
+                    ptrM = NULL;
+                    
+                    flagN = true;
                 }
-                free(ptrM);
-                ptrM = NULL;
-                
-                flagN = true;
             }
         }
-
     }
 
     return ptrM;
@@ -73,7 +79,7 @@ bool printMatrix(int** ptrM, size_t row, size_t col)
     {
         for (size_t i = 0; i < row; i++)
         {
-            if (ptrM[i] != NULL)
+            if (ptrM[i])
             {
                 for (size_t j = 0; j < col; j++)
                 {
@@ -83,8 +89,7 @@ bool printMatrix(int** ptrM, size_t row, size_t col)
             }
             else
             {
-                printf("NULL ");
-                printf("\n");
+                printf("NULL\n");
             }
         }
 
@@ -97,10 +102,21 @@ bool printMatrix(int** ptrM, size_t row, size_t col)
 int main()
 {
     
-    size_t row = 3;
-    size_t col = 3;
+    size_t row = 10;
+    size_t col = 10;
 
+    //Нулевой указатель на первую строку матрицы
+    //int **d_Mat = NULL;
+
+    //динамическая матрица со значениями из дипазона
     int **d_Mat = createMatrix_r(row, col, 0, 3);
+
+    //получение разреженной матрицы
+    if (d_Mat)
+    {
+        free(d_Mat[1]);
+        d_Mat[1] = NULL;
+    }
 
     bool checkN = printMatrix(d_Mat, row, col);
     if (!checkN)
