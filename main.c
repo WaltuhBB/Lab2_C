@@ -49,22 +49,19 @@ int** createMatrix_r(size_t row, size_t col, int down, int up)
 }
 
 //Очистка памяти динамической матрицы
-bool clearMemory(int** ptrM, size_t row)
+void clearMemory(int*** ptrM, size_t row)
 {
-    bool res = false;
-
-    if (ptrM != NULL)
+    if (ptrM && *ptrM)
     {
         for (size_t i = 0; i < row; i++)
         {
-            free(ptrM[i]);
+            free((*ptrM)[i]);
+            (*ptrM)[i] = NULL;
         }
 
-        free(ptrM);
-        res = true;
+        free(*ptrM);
+        *ptrM = NULL;
     }
-
-    return res;
 }
 
 //Вывод матрицы в консоль
@@ -111,7 +108,7 @@ int main()
         printf("Memory was never allocated ");
     }
 
-    clearMemory(d_Mat, row);
+    clearMemory(&d_Mat, row);
 
     return 0;
 
