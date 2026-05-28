@@ -179,7 +179,10 @@ int** transMatrix(int** Mat, size_t row, size_t col)
                 {
                     for (size_t j = 0; j < row; j++)
                     {
-                        res[i][j] = Mat[j][i];
+                        if (Mat[j])
+                        {
+                            res[i][j] = Mat[j][i];
+                        }
                     }
                 }
                 else
@@ -416,6 +419,35 @@ int main()
 
     if (UnTMat)
     {
+        int **TMat = transMatrix(UnTMat, row_3, col_3);
+
+        printMatrix(UnTMat, row_3, col_3);
+
+        printf("\n");
+
+        checkN = printMatrix(TMat, col_3, row_3);
+        if (!checkN)
+        {
+            printf("Memory was never allocated ");
+        }
+
+        clearMemory(&TMat, col_3);
+    }
+
+    clearMemory(&UnTMat, row_3);
+
+    printf("\n\n");
+
+    row_3 = 3;
+    col_3 = 4;
+
+    UnTMat = createMatrix_r(row_3, col_3, 1, 3);
+
+    if (UnTMat)
+    {
+        free(UnTMat[1]);
+        UnTMat[1] = NULL;
+        
         int **TMat = transMatrix(UnTMat, row_3, col_3);
 
         printMatrix(UnTMat, row_3, col_3);
