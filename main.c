@@ -99,11 +99,63 @@ bool printMatrix(int** ptrM, size_t row, size_t col)
     return res;
 }
 
+//Перемножение матриц
+int** mulMatrix(int** Mat_1, int** Mat_2, size_t row_1, size_t col_1, size_t row_2, size_t col_2)
+{
+    int **res = NULL;
+
+    if (Mat_1 && Mat_2 && (col_1 == row_2))
+    {
+        res = (int**)calloc(row_1, sizeof(int*));
+
+        if (res)
+        {
+            bool flagN = false;
+            size_t i;
+
+            for (i = 0; i < row_1 && !flagN; i++)
+            {
+                res[i] = (int*)calloc(col_2, sizeof(int));
+
+                if (res[i])
+                {
+                    for (size_t j = 0; j < col_2; j++)
+                    {
+                        for (size_t k = 0; k < col_1; k++)
+                        {
+                            res[i][j] += Mat_1[i][k] * Mat_2[k][j];
+                        }
+                    }
+                }
+                else
+                {
+                    flagN = true;
+                }
+            }
+
+            if (flagN)
+            {
+                for (size_t l = 0; l < i; l++)
+                {
+                    free(res[l]);
+                    res[l] = NULL;
+                }
+
+                free(res);
+                res = NULL;
+            }
+        }
+    }
+
+    return res;
+}
+
 int main()
 {
-    
     size_t row = 10;
     size_t col = 10;
+
+// Тесты для первой части
 
     //Нулевой указатель на первую строку матрицы
     //int **d_Mat = NULL;
@@ -126,6 +178,110 @@ int main()
 
     clearMemory(&d_Mat, row);
 
-    return 0;
+    printf("\n");
 
+// Тесты для второй части
+
+    size_t row_1 = 3;
+    size_t col_1 = 5;
+
+    size_t row_2 = col_1;
+    size_t col_2 = 3;
+
+    int **Mat_A = createMatrix_r(row_1, col_1, 2, 5);
+    int **Mat_B = createMatrix_r(row_2, col_2, -2, 3);
+    
+    if (Mat_A && Mat_B)
+    {
+        int **Mat_C = mulMatrix(Mat_A, Mat_B, row_1, col_1, row_2, col_2);
+        //int **Mat_C = mulMatrix(NULL, NULL, row_1, col_1, row_2, col_2);
+
+        printMatrix(Mat_A, row_1, col_1);
+        printf("*\n");
+        printMatrix(Mat_B, row_2, col_2);
+        
+        printf("\n");
+
+        checkN = printMatrix(Mat_C, row_1, col_2);
+        if (!checkN)
+        {
+            printf("an error occurred during calculation ");
+        }
+
+        clearMemory(&Mat_C, row_1);
+    }
+
+    clearMemory(&Mat_A, row_1);
+    clearMemory(&Mat_B, row_2);
+
+    printf("\n\n");
+
+
+    row_1 = 3;
+    col_1 = 5;
+
+    row_2 = col_1 + 1;
+    col_2 = 3;
+
+    Mat_A = createMatrix_r(row_1, col_1, 2, 5);
+    Mat_B = createMatrix_r(row_2, col_2, -2, 3);
+    
+    if (Mat_A && Mat_B)
+    {
+        int **Mat_C = mulMatrix(Mat_A, Mat_B, row_1, col_1, row_2, col_2);
+
+        printMatrix(Mat_A, row_1, col_1);
+        printf("*\n");
+        printMatrix(Mat_B, row_2, col_2);
+        
+        printf("\n");
+
+        checkN = printMatrix(Mat_C, row_1, col_2);
+        if (!checkN)
+        {
+            printf("an error occurred during calculation ");
+        }
+
+        clearMemory(&Mat_C, row_1);
+    }
+
+    clearMemory(&Mat_A, row_1);
+    clearMemory(&Mat_B, row_2);
+
+    printf("\n\n");
+
+
+    row_1 = 4;
+    col_1 = 5;
+
+    row_2 = col_1;
+    col_2 = 2;
+
+    Mat_A = createMatrix_r(row_1, col_1, 2, 5);
+    Mat_B = createMatrix_r(row_2, col_2, -2, 3);
+    
+    if (Mat_A && Mat_B)
+    {
+        int **Mat_C = mulMatrix(Mat_A, Mat_B, row_1, col_1, row_2, col_2);
+
+        printMatrix(Mat_A, row_1, col_1);
+        printf("*\n");
+        printMatrix(Mat_B, row_2, col_2);
+        
+        printf("\n");
+
+        checkN = printMatrix(Mat_C, row_1, col_2);
+        if (!checkN)
+        {
+            printf("an error occurred during calculation ");
+        }
+
+        clearMemory(&Mat_C, row_1);
+    }
+
+    clearMemory(&Mat_A, row_1);
+    clearMemory(&Mat_B, row_2);
+
+
+    return 0;
 }
