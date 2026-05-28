@@ -123,7 +123,14 @@ int** mulMatrix(int** Mat_1, int** Mat_2, size_t row_1, size_t col_1, size_t row
                     {
                         for (size_t k = 0; k < col_1; k++)
                         {
-                            res[i][j] += Mat_1[i][k] * Mat_2[k][j];
+                            if (!(Mat_1[i]) || !(Mat_2[k]))
+                            {
+                                res[i][j] += 0;
+                            }
+                            else
+                            {
+                                res[i][j] += Mat_1[i][k] * Mat_2[k][j];
+                            }
                         }
                     }
                 }
@@ -181,6 +188,7 @@ int main()
     printf("\n");
 
 // Тесты для второй части
+// Перемножение матриц
 
     size_t row_1 = 3;
     size_t col_1 = 5;
@@ -282,6 +290,47 @@ int main()
     clearMemory(&Mat_A, row_1);
     clearMemory(&Mat_B, row_2);
 
+    printf("\n\n");
+
+//Перемножение разряженных матриц
+    
+    row_1 = 4;
+    col_1 = 5;
+
+    row_2 = col_1;
+    col_2 = 2;
+
+    Mat_A = createMatrix_r(row_1, col_1, 2, 5);
+    Mat_B = createMatrix_r(row_2, col_2, -2, 3);
+    
+    if (Mat_A && Mat_B)
+    {
+        free(Mat_A[2]);
+        Mat_A[2] = NULL;
+
+        free(Mat_B[1]);
+        Mat_B[1] = NULL;
+        
+        int **Mat_C = mulMatrix(Mat_A, Mat_B, row_1, col_1, row_2, col_2);
+
+        printMatrix(Mat_A, row_1, col_1);
+        printf("*\n");
+        printMatrix(Mat_B, row_2, col_2);
+        
+        printf("\n");
+
+        checkN = printMatrix(Mat_C, row_1, col_2);
+        if (!checkN)
+        {
+            printf("an error occurred during calculation ");
+        }
+
+        clearMemory(&Mat_C, row_1);
+    }
+
+    clearMemory(&Mat_A, row_1);
+    clearMemory(&Mat_B, row_2);
+   
 
     return 0;
 }
