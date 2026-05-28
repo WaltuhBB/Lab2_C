@@ -157,6 +157,54 @@ int** mulMatrix(int** Mat_1, int** Mat_2, size_t row_1, size_t col_1, size_t row
     return res;
 }
 
+//Транспонирование матрицы
+int** transMatrix(int** Mat, size_t row, size_t col)
+{
+    int **res = NULL;
+
+    if (Mat)
+    {
+        res = (int**)calloc(col, sizeof(int*));
+
+        if (res)
+        {
+            bool flagN = false;
+            size_t i;
+
+            for (i = 0; i < col; i++)
+            {
+                res[i] = (int*)calloc(row, sizeof(int));
+
+                if (res[i])
+                {
+                    for (size_t j = 0; j < row; j++)
+                    {
+                        res[i][j] = Mat[j][i];
+                    }
+                }
+                else
+                {
+                    flagN = true;
+                }
+            }
+
+            if (flagN)
+            {
+                for (size_t k = 0; k < i; k++)
+                {
+                    free(res[k]);
+                    res[k] = NULL;
+                }
+
+                free(res);
+                res = NULL;
+            }
+        }
+    }
+
+    return res;
+}
+
 int main()
 {
     size_t row = 10;
@@ -330,7 +378,60 @@ int main()
 
     clearMemory(&Mat_A, row_1);
     clearMemory(&Mat_B, row_2);
-   
+
+    printf("\n\n");
+
+//Транспонирование матрицы
+
+    size_t row_3 = 4;
+    size_t col_3 = 3;
+
+    int **UnTMat = createMatrix_r(row_3, col_3, 1, 3);
+
+    if (UnTMat)
+    {
+        int **TMat = transMatrix(UnTMat, row_3, col_3);
+
+        printMatrix(UnTMat, row_3, col_3);
+
+        printf("\n");
+
+        checkN = printMatrix(TMat, col_3, row_3);
+        if (!checkN)
+        {
+            printf("Memory was never allocated ");
+        }
+
+        clearMemory(&TMat, col_3);
+    }
+
+    clearMemory(&UnTMat, row_3);
+
+    printf("\n\n");
+
+    row_3 = 3;
+    col_3 = 4;
+
+    UnTMat = createMatrix_r(row_3, col_3, 1, 3);
+
+    if (UnTMat)
+    {
+        int **TMat = transMatrix(UnTMat, row_3, col_3);
+
+        printMatrix(UnTMat, row_3, col_3);
+
+        printf("\n");
+
+        checkN = printMatrix(TMat, col_3, row_3);
+        if (!checkN)
+        {
+            printf("Memory was never allocated ");
+        }
+
+        clearMemory(&TMat, col_3);
+    }
+
+    clearMemory(&UnTMat, row_3);
 
     return 0;
 }
